@@ -25,7 +25,7 @@ The dictionary file should contain a comma-separated list of letters without dup
 a,b,c,d,e,f,g
 ```
 
-The dictionary must have an even number of elements, and each plaintext word should be unique.
+The dictionary must have an even number of elements, and each plaintext letter should be unique.
 
 ## Error Handling
 
