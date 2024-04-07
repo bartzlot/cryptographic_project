@@ -19,9 +19,10 @@ Make sure to replace `<path to dictionary file>` with the path to your dictionar
 
 ## Dictionary Format
 
-The dictionary file should contain a comma-separated list of word pairs. Each word pair consists of two words, where the first word is the plaintext and the second word is the corresponding ciphertext. For example:
-```
-apple,orange,banana,grape,cat,dog
+The dictionary file should contain a comma-separated list of letters without duplicated. All the letters in dictionary should be placed in the same order and content to ensure proper decryption. While encrypting, all letters used in plain text should be placed in dictionary file.
+
+''' 
+a,b,c,d,e,f,g
 ```
 
 The dictionary must have an even number of elements, and each plaintext word should be unique.
