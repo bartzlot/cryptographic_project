@@ -179,7 +179,7 @@ def main():
             print(f'Zaszyfrowany tekst: {encrypt_text(args["dictionary"], args["text"])}')
 
         except:
-            print("Usage: python text_cipher.py <-e or -d> dictionary.txt 'tekst do zaszyfrowania/odszyfrowania' ")
+            print("Usage: python text_cipher.py <-e or -d> <path to dictionary file> 'tekst do zaszyfrowania/odszyfrowania' ")
             sys.exit(1)
 
     elif args['usage'] == '-d':
@@ -197,8 +197,6 @@ def main():
 
 
     args['dictionary'] = get_dictionary(dictionary)
-
-
 
 if __name__ == "__main__":
     main()
