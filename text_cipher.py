@@ -1,7 +1,18 @@
 import sys
 
 def get_dictionary_file(file_path: str):
+    """
+    Funkcja odczytująca zawartość pliku słownika.
 
+    Args:
+        file_path (str): Ścieżka do pliku słownika.
+
+    Returns:
+        str: Zawartość pliku słownika.
+
+    Raises:
+        FileNotFoundError: Jeśli plik słownika nie istnieje.
+    """
     try:
         with open(file_path, 'r') as file:
             return file.read()
@@ -12,33 +23,53 @@ def get_dictionary_file(file_path: str):
 
 
 def get_dictionary(dictionary: str):
+    """
+    Funkcja przetwarzająca zawartość słownika.
 
+    Args:
+        dictionary (str): Zawartość słownika.
+
+    Returns:
+        list: Lista elementów słownika.
+
+    Raises:
+        ValueError: Jeśli słownik ma nieparzystą liczbę elementów.
+        ValueError: Jeśli słownik jest pusty.
+        ValueError: Jeśli słownik zawiera zduplikowane elementy.
+        ValueError: Jeśli format słownika jest niepoprawny.
+    """
     try:
-
         dictionary = dictionary.split(',')
 
-        if len(dictionary) %2 != 0:
-            print("Error: Dcitionary needs to have an even number of elements, try adding one more element to the dictionary.")
-            sys.exit(1)
+        if len(dictionary) % 2 != 0:
+            raise ValueError("Error: Słownik musi mieć parzystą liczbę elementów, spróbuj dodać jeden więcej element do słownika.")
         
         elif len(dictionary) == 0:
-            print("Error: Dictionary is empty")
-            sys.exit(1)
+            raise ValueError("Error: Słownik jest pusty")
 
         elif len(dictionary) != len(set(dictionary)):
-            print("Error: Dictionary has duplicate elements, please remove the duplicates and try again.")
-            sys.exit(1)
+            raise ValueError("Error: Słownik zawiera zduplikowane elementy, proszę usunąć duplikaty i spróbować ponownie.")
 
         return dictionary
     
     except:
-
-        print("Error: Dictionary format is incorrect, please check the format and try again. [value1,value2,value3,value4,...]")
-        sys.exit(1)
+        raise ValueError("Error: Niepoprawny format słownika, proszę sprawdzić format i spróbować ponownie. [wartość1, wartość2, wartość3, wartość4, ...]")
 
 
 def encrypt_text(dictionary: list, text: str):
+    """
+    Funkcja szyfrująca tekst.
 
+    Args:
+        dictionary (list): Lista elementów słownika.
+        text (str): Tekst do zaszyfrowania.
+
+    Returns:
+        str: Zaszyfrowany tekst.
+
+    Raises:
+        ValueError: Jeśli niektóre znaki w tekście nie znajdują się w słowniku.
+    """
     encrypted_text = ""
 
     for letter in text:
@@ -47,7 +78,7 @@ def encrypt_text(dictionary: list, text: str):
 
             index = dictionary.index(letter.lower())
             
-            if (index + 1) %2 == 0:
+            if (index + 1) % 2 == 0:
 
                 if letter.isupper():
                     encrypted_text += dictionary[(index-1) % len(dictionary)].upper()
@@ -66,9 +97,7 @@ def encrypt_text(dictionary: list, text: str):
         else:
 
             if letter.isalpha():
-                
-                print("Error: Some characters in the text are not in the dictionary, please check the text or dictionary content and try again.")
-                sys.exit(1)
+                raise ValueError("Error: Niektóre znaki w tekście nie znajdują się w słowniku, proszę sprawdzić zawartość tekstu lub słownika i spróbować ponownie.")
 
             encrypted_text += letter
 
@@ -76,7 +105,19 @@ def encrypt_text(dictionary: list, text: str):
 
             
 def decrypt_text(dictionary: list, text: str):
+    """
+    Funkcja deszyfrująca tekst.
 
+    Args:
+        dictionary (list): Lista elementów słownika.
+        text (str): Tekst do odszyfrowania.
+
+    Returns:
+        str: Odszyfrowany tekst.
+
+    Raises:
+        ValueError: Jeśli niektóre znaki w tekście nie znajdują się w słowniku.
+    """
     decrypted_text = ""
 
     for letter in text:
@@ -85,7 +126,7 @@ def decrypt_text(dictionary: list, text: str):
 
             index = dictionary.index(letter.lower())
             
-            if (index + 1) %2 == 0:
+            if (index + 1) % 2 == 0:
 
                 if letter.isupper():
                     decrypted_text += dictionary[(index-1) % len(dictionary)].upper()
@@ -104,9 +145,7 @@ def decrypt_text(dictionary: list, text: str):
         else:
 
             if letter.isalpha():
-
-                print("Error: Some characters in the text are not in the dictionary, please check the text or dictionary content and try again.")
-                sys.exit(1)
+                raise ValueError("Error: Niektóre znaki w tekście nie znajdują się w słowniku, proszę sprawdzić zawartość tekstu lub słownika i spróbować ponownie.")
             
             decrypted_text += letter
 
@@ -114,7 +153,9 @@ def decrypt_text(dictionary: list, text: str):
 
 
 def main():
-
+    """
+    Główna funkcja programu, która obsługuje szyfrowanie i deszyfrowanie tekstu.
+    """
     args = {
         'usage': None,
         'dictionary': None,
@@ -125,7 +166,7 @@ def main():
         args['usage'] = sys.argv[1]
     
     except:
-        print("Error: Usage is missing, please provide the usage -e for encryption or -d for decryption.")
+        print("Error: Brak podanego użycia, proszę podać -e dla szyfrowania lub -d dla deszyfrowania.")
         sys.exit(1)
 
     if args['usage'] == '-e':
@@ -135,10 +176,10 @@ def main():
             dictionary = get_dictionary_file(sys.argv[2])
             args['dictionary'] = get_dictionary(dictionary)
             args['text'] = sys.argv[3]
-            print(f'Encrypted text: {encrypt_text(args["dictionary"], args["text"])}')
+            print(f'Zaszyfrowany tekst: {encrypt_text(args["dictionary"], args["text"])}')
 
         except:
-            print("Usage: python text_cipher.py <-e or -d> dictionary.txt 'text to encrypt/decrypt' ")
+            print("Usage: python text_cipher.py <-e or -d> dictionary.txt 'tekst do zaszyfrowania/odszyfrowania' ")
             sys.exit(1)
 
     elif args['usage'] == '-d':
@@ -148,10 +189,10 @@ def main():
             dictionary = get_dictionary_file(sys.argv[2])
             args['dictionary'] = get_dictionary(dictionary)
             args['text'] = sys.argv[3]
-            print(f'Decrypted text: {decrypt_text(args["dictionary"], args["text"])}')
+            print(f'Odszyfrowany tekst: {decrypt_text(args["dictionary"], args["text"])}')
 
         except:
-            print("Usage: python text_cipher.py <-e or -d> dictionary.txt 'text to encrypt/decrypt' ")
+            print("Usage: python text_cipher.py <-e or -d> dictionary.txt 'tekst do zaszyfrowania/odszyfrowania' ")
             sys.exit(1)
 
 
