@@ -1,4 +1,19 @@
 import sys
+import os
+
+def create_dictionary_file(file_path: str, dictionary: list):
+    """
+    Funkcja tworząca plik słownika.
+
+    Args:
+        file_path (str): Ścieżka do pliku słownika.
+        dictionary (list): Lista elementów słownika.
+        """
+    with open(file_path, 'w') as file:
+
+        dictionary = list(set(dictionary))
+        file.write(','.join(dictionary))
+
 
 def get_dictionary_file(file_path: str):
     """
@@ -14,6 +29,7 @@ def get_dictionary_file(file_path: str):
         FileNotFoundError: Jeśli plik słownika nie istnieje.
     """
     try:
+
         with open(file_path, 'r') as file:
             return file.read()
     
@@ -173,9 +189,20 @@ def main():
 
         try:
             
-            dictionary = get_dictionary_file(sys.argv[2])
-            args['dictionary'] = get_dictionary(dictionary)
+            if os.path.exists(sys.argv[2]):
+                
+                dictionary = get_dictionary_file(sys.argv[2])
+                args['text'] = sys.argv[3]
+
+            else:
+
+                args['text'] = sys.argv[3]
+                create_dictionary_file(sys.argv[2], args['text'])
+                dictionary = get_dictionary_file(sys.argv[2])
+                print(f"Utworzono plik slownika o ściece: {sys.argv[2]}")
+
             args['text'] = sys.argv[3]
+            args['dictionary'] = get_dictionary(dictionary)
             print(f'Zaszyfrowany tekst: {encrypt_text(args["dictionary"], args["text"])}')
 
         except:
